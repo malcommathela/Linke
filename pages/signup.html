@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Linke — Smart URL Shortener</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/signup.css">
+    <base target="_blank">
+</head>
+<body>
+<div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+</div>
+
+<div class="container">
+    <!-- Left Section - Signup Form -->
+    <div class="form-section">
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <button class="nav-btn back-btn" aria-label="Go back" type="button" onclick="goBack()">
+                <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+            </button>
+            <button class="nav-btn menu-btn" type="button">
+                <i data-lucide="more-horizontal" style="width: 18px; height: 18px;"></i>
+                <span>Menu</span>
+            </button>
+            <div class="location-badge">
+                <i data-lucide="map-pin" style="width: 14px; height: 14px; color: var(--accent-teal);"></i>
+                <span>Global</span>
+                <img src="https://flagcdn.com/w20/un.png" alt="UN" class="flag-icon" />
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="link-2" style="width: 26px; height: 26px; color: white;"></i>
+                </div>
+            </div>
+            <h1 class="title">Join Linke</h1>
+            <p class="subtitle">Start shortening & tracking your links today</p>
+        </div>
+
+        <!-- Toggle Tabs -->
+        <div class="tab-container">
+            <button class="tab active" data-tab="register" type="button">
+                Register
+            </button>
+            <button class="tab" data-tab="login" type="button" onclick="goToLogin()">
+                Login
+            </button>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-login">
+            <button class="social-icon" aria-label="Continue with Google">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path fill="#EA4335" d="M12 5.04c1.67 0 3.17.58 4.35 1.71l3.24-3.24C17.46 1.45 14.89.5 12 .5 7.33.5 3.29 3.21 1.54 7.14l3.73 2.9c.83-2.49 3.18-4.5 5.73-4.5z"/>
+                    <path fill="#34A853" d="M23.5 12c0-.8-.07-1.53-.2-2.25H12v4.26h6.45c-.28 1.48-1.06 2.73-2.21 3.58l3.56 2.77c2.08-1.92 3.2-4.74 3.2-8.36z"/>
+                    <path fill="#FBBC05" d="M5.27 14.04l-3.73 2.9C3.29 20.79 7.33 23.5 12 23.5c2.89 0 5.46-1.02 7.35-2.67l-3.56-2.77c-.99.67-2.26 1.07-3.79 1.07-2.55 0-4.9-2.01-5.73-4.5z"/>
+                    <path fill="#4285F4" d="M12 5.04c2.55 0 4.9 2.01 5.73 4.5l3.73-2.9C19.71 3.21 15.67.5 12 .5c-2.89 0-5.46 1.02-7.35 2.67l3.56 2.77c.99-.67 2.26-1.07 3.79-1.07z"/>
+                </svg>
+            </button>
+            <button class="social-icon" aria-label="Continue with Apple">
+                <svg viewBox="0 0 24 24" fill="#1A1A1A">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+            </button>
+            <button class="social-icon" aria-label="Continue with GitHub">
+                <svg viewBox="0 0 24 24" fill="#1A1A1A">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <!-- Registration Form -->
+        <form class="signup-form" id="signupForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="johndoe" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-field">
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                    <span class="strength-badge" id="strengthBadge">Strong ✓</span>
+                    <button type="button" class="toggle-password" id="togglePassword" onclick="togglePassword()">
+                        <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="rememberMe">
+                    <span class="checkmark"></span>
+                    I agree to the Terms & Privacy Policy
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn">Create your account</button>
+        </form>
+        <p id="message"></p>
+
+        <p class="login-text">
+            Already have an account?
+            <a href="#" class="login-link" onclick="goToLogin()">Sign In</a>
+        </p>
+    </div>
+
+    <!-- Right Section - Hero -->
+    <div class="hero-section">
+        <div class="location-tag">
+            <div class="location-icon">
+                <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
+            </div>
+            <div class="location-info">
+                <div class="location-name">Smart Link Alerts</div>
+                <div class="location-address">Real-time notifications</div>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-header">
+                <div class="stats-dot"></div>
+                <span class="stats-label">Trending Now</span>
+            </div>
+            <div class="stats-number">86.5%</div>
+            <div class="stats-desc">Average click-through rate</div>
+        </div>
+
+        <!-- Hero Illustration -->
+        <div class="hero-illustration">
+            <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="160" cy="160" r="130" fill="white" opacity="0.3"/>
+                <circle cx="160" cy="160" r="100" fill="white" opacity="0.2"/>
+
+                <!-- Link chain with growth arrow -->
+                <g transform="translate(90, 110)">
+                    <!-- Main link -->
+                    <rect x="0" y="30" width="60" height="24" rx="12" fill="none" stroke="#2D9C8E" stroke-width="4"/>
+                    <rect x="15" y="36" width="30" height="12" rx="6" fill="#2D9C8E" opacity="0.2"/>
+
+                    <!-- Short link -->
+                    <rect x="70" y="30" width="40" height="24" rx="12" fill="none" stroke="#E85D4E" stroke-width="4"/>
+
+                    <!-- Growth arrow -->
+                    <path d="M130 42 L160 20 L155 25 M160 20 L155 15" stroke="#D4A843" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+                    <!-- Chart bars -->
+                    <rect x="170" y="35" width="8" height="15" rx="2" fill="#2D9C8E" opacity="0.6"/>
+                    <rect x="182" y="25" width="8" height="25" rx="2" fill="#2D9C8E" opacity="0.8"/>
+                    <rect x="194" y="15" width="8" height="35" rx="2" fill="#2D9C8E"/>
+                </g>
+
+                <!-- Notification bubbles -->
+                <g transform="translate(200, 70)">
+                    <rect x="0" y="0" width="90" height="32" rx="16" fill="#1A1A1A"/>
+                    <circle cx="16" cy="16" r="7" fill="#22c55e"/>
+                    <path d="M13 16 L15 18 L19 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <text x="28" y="20" fill="white" font-family="DM Sans" font-size="10" font-weight="600">Link active!</text>
+                </g>
+
+                <g transform="translate(50, 210)">
+                    <rect x="0" y="0" width="100" height="30" rx="15" fill="#1A1A1A"/>
+                    <text x="15" y="19" fill="white" font-family="Space Grotesk" font-size="11" font-weight="600">+1,234 clicks</text>
+                </g>
+
+                <!-- Decorative dots -->
+                <circle cx="70" cy="80" r="6" fill="#E85D4E" opacity="0.4"/>
+                <circle cx="260" cy="90" r="4" fill="#D4A843" opacity="0.4"/>
+                <circle cx="250" cy="250" r="8" fill="#2D9C8E" opacity="0.3"/>
+                <circle cx="80" cy="260" r="5" fill="#4A7CFF" opacity="0.3"/>
+
+                <!-- Small link icons -->
+                <g transform="translate(240, 180)">
+                    <rect x="0" y="0" width="24" height="12" rx="6" fill="none" stroke="#D4A843" stroke-width="2"/>
+                    <circle cx="6" cy="6" r="2" fill="#D4A843"/>
+                </g>
+            </svg>
+        </div>
+
+        <div class="hero-content">
+            <h2 class="hero-title">
+                Your next link<br>
+                success starts<br>
+                <span class="highlight">here</span>
+            </h2>
+            <p class="hero-desc">Create short links, track analytics, and get alerts when your content goes viral.</p>
+        </div>
+
+        <div class="destinations">
+            <div class="dest-label">
+                <div class="pulse-dot"></div>
+                <span>Popular features</span>
+            </div>
+            <div class="dest-tags">
+                <span class="dest-tag teal">Custom Links</span>
+                <span class="dest-tag coral">Smart Alerts</span>
+                <span class="dest-tag gold">Deep Analytics</span>
+                <span class="dest-tag blue">QR Codes</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../public/scripts/signup.js">
+</script>
+</body>
+</html>

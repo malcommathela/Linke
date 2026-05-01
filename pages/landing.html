@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linke — Smart URL Shortener</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/landing.css">
+    <base target="_blank">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-brand">linke</a>
+    <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#stats" class="nav-link">Analytics</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+    </div>
+    <div class="nav-actions">
+        <a href="#" class="btn btn-ghost" onclick="goToLogin()">Sign in</a>
+        <a href="#" class="btn btn-primary" onclick="goToSignUp()">Get started</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+        <div class="shape shape-6"></div>
+    </div>
+
+    <div class="hero-content">
+        <div class="hero-illustration">
+            <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background circle -->
+                <circle cx="140" cy="140" r="120" fill="#F5F0EB" opacity="0.5"/>
+
+                <!-- Character body -->
+                <ellipse cx="140" cy="200" rx="35" ry="50" fill="#1A1A1A"/>
+                <rect x="115" y="180" width="50" height="70" rx="8" fill="#1A1A1A"/>
+
+                <!-- Head -->
+                <circle cx="140" cy="145" r="28" fill="#F5E6D3"/>
+                <path d="M140 117 Q155 117 160 135 Q165 145 160 155 Q155 165 140 165 Q125 165 120 155 Q115 145 120 135 Q125 117 140 117" fill="#F5E6D3"/>
+
+                <!-- Hair -->
+                <path d="M140 117 Q130 110 125 120 Q120 130 125 140 Q130 120 140 117" fill="#1A1A1A"/>
+                <path d="M140 117 Q150 110 155 120 Q160 130 155 140 Q150 120 140 117" fill="#1A1A1A"/>
+
+                <!-- Eyes -->
+                <circle cx="132" cy="142" r="3" fill="#1A1A1A"/>
+                <circle cx="148" cy="142" r="3" fill="#1A1A1A"/>
+
+                <!-- Smile -->
+                <path d="M135 152 Q140 156 145 152" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+                <!-- Arm holding phone -->
+                <path d="M160 190 Q180 170 175 150" stroke="#1A1A1A" stroke-width="12" stroke-linecap="round" fill="none"/>
+                <rect x="165" y="135" width="20" height="30" rx="4" fill="#1A1A1A" transform="rotate(-15 175 150)"/>
+                <rect x="168" y="138" width="14" height="20" rx="2" fill="#4A7CFF" transform="rotate(-15 175 150)"/>
+
+                <!-- Coffee cup in other hand -->
+                <path d="M110 200 Q100 210 105 220" stroke="#1A1A1A" stroke-width="10" stroke-linecap="round" fill="none"/>
+                <rect x="95" y="215" width="16" height="20" rx="3" fill="#1A1A1A"/>
+                <rect x="97" y="217" width="12" height="12" rx="2" fill="#D4A843"/>
+
+                <!-- Bag strap -->
+                <path d="M125 180 Q100 160 95 190" stroke="#1A1A1A" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <rect x="85" y="185" width="20" height="25" rx="5" fill="#1A1A1A"/>
+
+                <!-- Notification bubbles -->
+                <g transform="translate(185, 110)">
+                    <rect x="0" y="0" width="110" height="36" rx="18" fill="#1A1A1A"/>
+                    <circle cx="18" cy="18" r="8" fill="#22c55e"/>
+                    <path d="M15 18 L17 20 L21 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <text x="32" y="22" fill="white" font-family="DM Sans" font-size="11" font-weight="600">Your link is buzzing</text>
+                </g>
+
+                <g transform="translate(80, 95)">
+                    <rect x="0" y="0" width="50" height="30" rx="15" fill="#1A1A1A"/>
+                    <text x="15" y="20" fill="white" font-family="DM Sans" font-size="11" font-weight="600">sms</text>
+                </g>
+
+                <!-- Email icon -->
+                <g transform="translate(195, 240)">
+                    <rect x="0" y="0" width="30" height="24" rx="6" fill="#1A1A1A"/>
+                    <path d="M3 6 L15 14 L27 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </g>
+
+                <!-- Decorative elements -->
+                <path d="M50 80 Q60 70 70 80" stroke="#4A7CFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+                <circle cx="220" cy="70" r="6" fill="#2D9C8E"/>
+                <rect x="60" y="220" width="20" height="4" rx="2" fill="#E85D4E"/>
+                <rect x="65" y="228" width="10" height="4" rx="2" fill="#E85D4E"/>
+                <path d="M230 200 Q240 190 250 200" stroke="#D4A843" stroke-width="3" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+
+        <h1 class="hero-title">
+            Creates short links that<br>
+            <span class="highlight">Alert you when link Buzz</span><br>
+            & more.
+        </h1>
+        <p class="hero-subtitle">
+            Short and customize your links and receive alert messages or emails when they start buzzing or when they are not responding.
+        </p>
+        <a href="#shortener" class="hero-cta">
+            Shorten your link it's free
+            <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+        </a>
+    </div>
+
+    <!-- URL Shortener -->
+    <div class="shortener-box" id="shortener">
+        <div class="shortener-label">
+            <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+            Paste your long URL
+        </div>
+        <div class="shortener-input-group">
+            <input type="text" class="shortener-input" id="urlInput" placeholder="https://example.com/very-long-url-that-needs-shortening">
+            <button class="shortener-btn" id="shortenBtn" onclick="shortenUrl()">
+                <span id="btnText">Create</span>
+            </button>
+        </div>
+        <div class="shortener-result" id="resultBox">
+            <div class="result-label">Your shortened link</div>
+            <div class="result-url" id="shortUrl">linke.io/aB3xK9</div>
+            <div class="result-actions">
+                <button class="result-btn result-btn-copy" id="copyBtn" onclick="copyUrl()">
+                    <i data-lucide="copy" style="width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
+                    <span id="copyText">Copy</span>
+                </button>
+                <button class="result-btn result-btn-qr" onclick="showQR()">
+                    <i data-lucide="qr-code" style="width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
+                    QR Code
+                </button>
+            </div>
+        </div>
+        <div class="shortener-stats">
+            <div class="shortener-stat">
+                <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+                <span>HTTPS Secure</span>
+            </div>
+            <div class="shortener-stat">
+                <i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i>
+                <span>Real-time Analytics</span>
+            </div>
+            <div class="shortener-stat">
+                <i data-lucide="infinity" style="width: 16px; height: 16px;"></i>
+                <span>Never Expires</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+    <div class="features-header fade-in">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">More than an URL Shortener</h2>
+        <p class="section-subtitle">Explore our features, and see what makes us different from other URL shorteners out there.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card fade-in stagger-1">
+            <div class="feature-icon teal">
+                <i data-lucide="link" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">Custom Short Links</h3>
+            <p class="feature-desc">Create branded, memorable short links with your own custom domain. Make every link an extension of your brand identity.</p>
+        </div>
+        <div class="feature-card fade-in stagger-2">
+            <div class="feature-icon coral">
+                <i data-lucide="bell-ring" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">Smart Alerts</h3>
+            <p class="feature-desc">Get instant notifications via SMS or email when your links start trending. Never miss a viral moment again.</p>
+        </div>
+        <div class="feature-card fade-in stagger-3">
+            <div class="feature-icon gold">
+                <i data-lucide="pie-chart" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">Deep Analytics</h3>
+            <p class="feature-desc">Track clicks, locations, devices, and referral sources in real-time. Understand your audience like never before.</p>
+        </div>
+        <div class="feature-card fade-in stagger-4">
+            <div class="feature-icon blue">
+                <i data-lucide="qr-code" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">QR Codes</h3>
+            <p class="feature-desc">Generate beautiful QR codes for every short link. Perfect for print materials, packaging, and offline campaigns.</p>
+        </div>
+        <div class="feature-card fade-in stagger-1">
+            <div class="feature-icon teal">
+                <i data-lucide="globe" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">Geo Targeting</h3>
+            <p class="feature-desc">Redirect visitors to different destinations based on their country or city. One link, multiple experiences.</p>
+        </div>
+        <div class="feature-card fade-in stagger-2">
+            <div class="feature-icon coral">
+                <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h3 class="feature-title">Link Security</h3>
+            <p class="feature-desc">Password protection, expiration dates, and click limits. Keep your sensitive links safe and under control.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" id="stats">
+    <div class="stats-container">
+        <div class="stats-content fade-in">
+            <div class="section-label">Analytics</div>
+            <h2 class="section-title">SHORT IS BETTER 🚀</h2>
+            <p class="section-subtitle">
+                Your URL is the first impression you give of yourself and your company on the web and on social networks: the shorter a link is, the more it will be considered reliable, easy to remember and even more beautiful to show.
+            </p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">86.5%</div>
+                    <div class="stat-label">Engagement Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2.4M+</div>
+                    <div class="stat-label">Links Created</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50M+</div>
+                    <div class="stat-label">Total Clicks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+            </div>
+        </div>
+        <div class="stats-visual fade-in stagger-2">
+            <div class="donut-chart">
+                <svg width="280" height="280" viewBox="0 0 280 280">
+                    <circle cx="140" cy="140" r="110" fill="none" stroke="#E5E0DB" stroke-width="24"/>
+                    <circle cx="140" cy="140" r="110" fill="none" stroke="#2D9C8E" stroke-width="24"
+                            stroke-dasharray="691" stroke-dashoffset="95" stroke-linecap="round"/>
+                    <circle cx="140" cy="140" r="110" fill="none" stroke="#E85D4E" stroke-width="24"
+                            stroke-dasharray="691" stroke-dashoffset="620" stroke-linecap="round"/>
+                    <circle cx="140" cy="140" r="110" fill="none" stroke="#D4A843" stroke-width="24"
+                            stroke-dasharray="691" stroke-dashoffset="660" stroke-linecap="round"/>
+                </svg>
+                <div class="donut-center">
+                    <div class="donut-value">86.5%</div>
+                    <div class="donut-label">Engagement</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+    <div class="features-header fade-in">
+        <div class="section-label">Process</div>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Three simple steps to start shortening and tracking your links.</p>
+    </div>
+    <div class="steps-container">
+        <div class="step fade-in stagger-1">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Paste Your Long URL</h3>
+                <p class="step-desc">Copy and paste your lengthy URL into our input field. We support all types of links — websites, documents, images, and more.</p>
+            </div>
+        </div>
+        <div class="step fade-in stagger-2">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Customize & Create</h3>
+                <p class="step-desc">Add a custom alias, set expiration, enable password protection, or configure geo-targeting. Then click create.</p>
+            </div>
+        </div>
+        <div class="step fade-in stagger-3">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3 class="step-title">Share & Monitor</h3>
+                <p class="step-desc">Share your short link anywhere. Track performance in real-time and get alerts when it starts buzzing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section" id="pricing">
+    <div class="cta-content fade-in">
+        <h2 class="cta-title">Ready to make your URLs stand out?</h2>
+        <p class="cta-subtitle">Join thousands of marketers, creators, and businesses who trust Linke for their link management needs.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-white">Get started free</a>
+            <a href="#" class="btn btn-outline-white">View pricing</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div>
+            <a href="#" class="footer-brand">linke</a>
+            <p class="footer-desc">The modern URL shortener that alerts you when your links start buzzing. Built for creators, marketers, and growth teams.</p>
+        </div>
+        <div>
+            <h4 class="footer-title">Product</h4>
+            <ul class="footer-links">
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Features</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Pricing</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>API</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Integrations</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="footer-title">Company</h4>
+            <ul class="footer-links">
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>About</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Blog</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Careers</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Contact</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="footer-title">Legal</h4>
+            <ul class="footer-links">
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Privacy</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Terms</a></li>
+                <li><a href="#"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>Security</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p class="footer-copyright">© 2026 Linke. All rights reserved.</p>
+        <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Twitter">
+                <i data-lucide="twitter" style="width: 18px; height: 18px;"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="GitHub">
+                <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="LinkedIn">
+                <i data-lucide="linkedin" style="width: 18px; height: 18px;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+    <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+    <span id="toastMessage">Link copied to clipboard!</span>
+</div>
+
+<script src="../public/scripts/landing.js"></script>
+</body>
+</html>
