@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linke Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/dashboard.css">
+    <base target="_blank">
+</head>
+<body>
+<div class="app">
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
+        <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">
+            <i data-lucide="chevron-left" style="width: 14px; height: 14px;" id="sidebarToggleIcon"></i>
+        </div>
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i data-lucide="link-2" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            <span class="brand-text">linke</span>
+        </div>
+
+        <nav class="nav">
+            <a href="#" class="nav-item active" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="link" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Links</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Analytics</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Events</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="globe" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Domains</span>
+                <span class="pro-badge">PRO</span>
+            </a>
+        </nav>
+
+        <div class="nav-bottom">
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Settings</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <span class="nav-icon"><i data-lucide="help-circle" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Support</span>
+            </a>
+        </div>
+
+        <div class="usage-section" id="usageSection">
+            <div class="usage-header">
+                <span class="usage-title">Free Usage</span>
+                <span class="usage-info" onclick="showUpgradeModal()">
+                        <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                    </span>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Links</span>
+                    <span class="usage-bar-value">22 of 30</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill" style="width: 73%"></div>
+                </div>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Clicks</span>
+                    <span class="usage-bar-value">20k of 100k</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill clicks" style="width: 20%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user-avatar">JD</div>
+            <span class="user-name">John Doe</span>
+            <span class="user-menu">
+                    <i data-lucide="more-horizontal" style="width: 16px; height: 16px;"></i>
+                </span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="page-header">
+            <div class="page-title-group">
+                <h1 class="page-title">Linke Links</h1>
+                <p class="page-subtitle">Manage, view and analyse links.</p>
+            </div>
+            <div class="page-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <i data-lucide="moon" style="width: 18px; height: 18px;" id="themeIcon"></i>
+                </button>
+                <button class="btn btn-primary" onclick="openCreatePanel()">
+                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                    Create New Link
+                </button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                    <span class="search-icon">
+                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                    </span>
+                <input type="text" placeholder="Search for links" id="searchInput" oninput="filterLinks()">
+            </div>
+            <div class="toolbar-right">
+                <button class="filter-btn">
+                    <i data-lucide="filter" style="width: 14px; height: 14px;"></i>
+                    Filter
+                </button>
+            </div>
+        </div>
+
+        <div class="links-container" id="linksContainer">
+            <!-- Links will be rendered here -->
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-illustration">
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="40" width="60" height="24" rx="12" fill="none" stroke="var(--accent-teal)" stroke-width="3"/>
+                    <rect x="55" y="40" width="45" height="24" rx="12" fill="none" stroke="var(--accent-coral)" stroke-width="3"/>
+                    <path d="M85 52 L105 35 L100 40 M105 35 L100 30" stroke="var(--accent-gold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="30" cy="25" r="4" fill="var(--accent-teal)" opacity="0.5"/>
+                    <circle cx="95" cy="85" r="5" fill="var(--accent-coral)" opacity="0.4"/>
+                    <circle cx="15" cy="90" r="3" fill="var(--accent-gold)" opacity="0.5"/>
+                </svg>
+            </div>
+            <h3 class="empty-title">Create New <span><i data-lucide="link" style="width: 22px; height: 22px; vertical-align: middle;"></i></span> Link</h3>
+            <p class="empty-desc">Start shortening your links and track their performance seamlessly. Create a new link now to simplify sharing and gain valuable insights!</p>
+            <button class="btn btn-primary" onclick="openCreatePanel()">
+                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                Create New Link
+            </button>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <span class="pagination-info">Page 1 of 16</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled><i data-lucide="chevrons-left" style="width: 14px; height: 14px;"></i></button>
+                <button class="page-btn" disabled><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn">6</button>
+                <span style="color: var(--text-muted); padding: 0 4px;">...</span>
+                <button class="page-btn">16</button>
+                <button class="page-btn"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+                <button class="page-btn"><i data-lucide="chevrons-right" style="width: 14px; height: 14px;"></i></button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create Panel Overlay -->
+<div class="create-panel-overlay" id="createPanelOverlay" onclick="closeCreatePanel()"></div>
+
+<!-- Create Link Panel -->
+<div class="create-panel" id="createPanel">
+    <div class="create-panel-header">
+        <h2 class="create-panel-title">Create New Link</h2>
+        <button class="create-panel-close" onclick="closeCreatePanel()">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+    </div>
+    <div class="create-panel-body">
+        <div class="form-group">
+            <label class="form-label">Destination URL</label>
+            <input type="url" class="form-input" placeholder="https://example.com/your-long-url" id="createUrl">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Shorten Key</label>
+            <div class="form-input-group">
+                <span class="form-input-prefix">linke.io/</span>
+                <input type="text" class="form-input" placeholder="(optional)" id="createKey" style="flex: 1;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Expiration</label>
+            <select class="form-select" id="createExpiry">
+                <option value="never">Never</option>
+                <option value="6h">6 hours</option>
+                <option value="1w">1 week</option>
+                <option value="1m">1 month</option>
+                <option value="6m">6 months</option>
+                <option value="1y">1 year</option>
+            </select>
+        </div>
+
+        <div class="qr-preview">
+            <div class="qr-placeholder">
+                <div class="qr-pattern" id="qrPattern">
+                    <!-- QR cells generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="link-preview-section">
+            <div class="link-preview-label">Link Preview: <span>linke.io/<span id="previewKey">new-link</span></span></div>
+            <div class="link-preview-card">
+                <div class="link-preview-browser">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                </div>
+                <div class="link-preview-content" id="previewContent">
+                    Enter a URL to see preview
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="create-panel-footer">
+        <button class="btn btn-primary" onclick="createLink()">
+            <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+            Create New Link
+        </button>
+    </div>
+</div>
+
+<!-- Upgrade Modal -->
+<div class="upgrade-modal" id="upgradeModal" onclick="closeUpgradeModal(event)">
+    <div class="upgrade-card" onclick="event.stopPropagation()">
+        <div class="upgrade-icon">
+            <i data-lucide="crown" style="width: 28px; height: 28px;"></i>
+        </div>
+        <h3 class="upgrade-title">Linke Professional</h3>
+        <p class="upgrade-desc">Discover your free benefits and upgrade to Linke Professional for unlimited links, custom domains, and advanced analytics.</p>
+        <button class="upgrade-btn" onclick="showToast('Coming soon!', 'success')">Upgrade to PRO</button>
+        <button class="upgrade-skip" onclick="closeUpgradeModal()">Maybe later</button>
+    </div>
+</div>
+
+<div class="upgrade-modal" id="qrModal" onclick="closeQrModal(event)">
+    <div class="upgrade-card" onclick="event.stopPropagation()">
+        <h3 class="upgrade-title">QR Code</h3>
+        <p class="upgrade-desc">Scan this code to open your short link.</p>
+        <img id="qrModalImage" src="" alt="QR Code" style="width: 220px; height: 220px; border-radius: 16px; margin-bottom: 12px;">
+        <button class="upgrade-skip" onclick="closeQrModal()">Close</button>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../public/scripts/dashboard.js"></script>
+</body>
+</html>

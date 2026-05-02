@@ -1,29 +1,24 @@
-lucide.createIcons();
+// Initialize Lucide icons
+document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
 
-function goBack() {
-    window.history.back();
-}
-
-function goToSignUp() {
-    window.location.href = 'signup.html';
-}
-
-// Optional: toggle password visibility if you want it client-side
-const togglePasswordBtn = document.getElementById("togglePassword");
-const passwordInput = document.getElementById("password");
-if (togglePasswordBtn && passwordInput) {
-    togglePasswordBtn.addEventListener("click", () => {
-        const type =
-            passwordInput.getAttribute("type") === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", ()=> {
     const form = document.getElementById("login-form");
     const messageEl = document.getElementById("login-message");
 
-    form.addEventListener("submit", async e => {
+    const togglePasswordBtn = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener("click", () => {
+            const type =
+                passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+        });
+    }
+
+    if (!form || !messageEl) return;
+
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const formData = new FormData(form);
@@ -31,26 +26,40 @@ document.addEventListener("DOMContentLoaded", ()=> {
         const password = formData.get("password");
 
         try {
-            const req = await fetch("/login", {
+            const res = await fetch("/login", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({email, password}),
-            })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-            const data = await req.json();
-            if (!req.ok) {
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) {
                 messageEl.textContent = data.message || "Login error";
                 messageEl.style.color = "red";
                 return;
             }
 
-            messageEl.textContent = data.message || "Sign up successful";
+            messageEl.textContent = data.message || "Successfully logged in";
             messageEl.style.color = "green";
-        }
-        catch (err) {
+
+            // small delay so user sees the message
+            setTimeout(() => {
+                window.location.href = "/dashboard";
+            }, 500);
+        } catch (err) {
             console.error(err);
             messageEl.textContent = "Network error";
             messageEl.style.color = "red";
         }
-    })
+    });
 });
+
+// Navigation helpers
+function goBack() {
+    window.history.back();
+}
+
+function goToSignUp() {
+    window.location.href = "/pages/signup.html"; // or "/signup" if you have a route
+}
