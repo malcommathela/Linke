@@ -12,16 +12,28 @@ const ogs = require("open-graph-scraper");
 const QRCode = require("qrcode");
 
 
+// Only load .env in non-production (optional but cleaner)
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-const JWT_SECRET = process.env.JWT_SECRET
-const SUPABASE_URL = process.env.SUPABASE_URL
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const JWT_SECRET = process.env.JWT_SECRET;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!JWT_SECRET || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("Missing required envs", {
+        hasJWT: !!JWT_SECRET,
+        hasSupabaseUrl: !!SUPABASE_URL,
+        hasServiceKey: !!SUPABASE_SERVICE_ROLE_KEY,
+    });
+    process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 
 app.use(cookieParser());
