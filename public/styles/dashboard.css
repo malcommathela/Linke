@@ -552,12 +552,14 @@ body {
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
+    z-index: 1;
 }
 
 .link-card:hover {
     border-color: var(--accent-teal);
     box-shadow: var(--shadow-soft);
     transform: translateY(-1px);
+    z-index: 2;
 }
 
 .link-favicon {
@@ -697,6 +699,78 @@ body {
 .link-menu:hover {
     background: var(--hover-bg);
     color: var(--text-primary);
+}
+
+/*Tests*/
+
+/* Link menu dropdown */
+.link-menu {
+    position: relative; /* make it the anchor for the dropdown */
+}
+
+.link-menu-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    min-width: 170px;
+    padding: 6px 0;
+    box-shadow: var(--shadow-medium);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 999;
+}
+
+.link-menu-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.link-menu-item {
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-align: left;
+}
+
+.link-menu-item i {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+}
+
+.link-menu-item:hover {
+    background: var(--hover-bg);
+    color: var(--accent-teal);
+}
+
+.link-menu-item.danger {
+    color: var(--accent-coral);
+}
+
+.link-menu-item.danger i {
+    color: var(--accent-coral);
+}
+
+.link-menu-divider {
+    height: 1px;
+    margin: 4px 0;
+    background: var(--border-light);
 }
 
 /* Empty State */
@@ -1086,6 +1160,86 @@ body {
 
 .toast.error {
     background: var(--accent-coral);
+}
+
+/* Delete confirmation modal */
+.delete-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 260;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.delete-modal.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.delete-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 24px 24px 20px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+    transform: translateY(8px);
+    transition: transform 0.25s ease;
+}
+
+.delete-modal.show .delete-card {
+    transform: translateY(0);
+}
+
+.delete-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(232, 93, 78, 0.09);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: var(--accent-coral);
+}
+
+.delete-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.delete-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn-danger {
+    background: var(--accent-coral);
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #d44637;
+    transform: translateY(-1px);
 }
 
 /* Upgrade Modal */
