@@ -1,5 +1,5 @@
 /* ============================================
-   Linke Support Page Controller
+   Linke Support Page Controller — FULLY FUNCTIONAL
    ============================================ */
 
 class SupportApp {
@@ -13,6 +13,7 @@ class SupportApp {
         this.bindEvents();
         this.loadTheme();
         await this.loadUser();
+        await this.loadUsageStats();
     }
 
     bindEvents() {
@@ -28,9 +29,38 @@ class SupportApp {
                 this.user = await res.json();
                 document.getElementById('userName').textContent = this.user.username || 'User';
                 document.getElementById('userAvatar').textContent = (this.user.username || 'U').slice(0, 2).toUpperCase();
+            } else if (res.status === 401) {
+                window.location.href = '/pages/login.html';
             }
         } catch (err) {
             console.error('Failed to load user:', err);
+            showToast('Failed to load user data', 'error');
+        }
+    }
+
+    async loadUsageStats() {
+        try {
+            const res = await fetch('/api/urls');
+            if (res.ok) {
+                const data = await res.json();
+                const urls = data.urls || [];
+                const totalClicks = urls.reduce((sum, u) => sum + (u.click_count || 0), 0);
+
+                const linkCount = urls.length;
+                const linkLimit = 30;
+                const linkPercent = Math.min((linkCount / linkLimit) * 100, 100);
+
+                document.getElementById('linkUsage').textContent = `${linkCount} of ${linkLimit}`;
+                document.getElementById('linkProgress').style.width = `${linkPercent}%`;
+
+                const clickLimit = 100000;
+                const clickPercent = Math.min((totalClicks / clickLimit) * 100, 100);
+
+                document.getElementById('clickUsage').textContent = `${totalClicks.toLocaleString()} of ${clickLimit.toLocaleString()}`;
+                document.getElementById('clickProgress').style.width = `${clickPercent}%`;
+            }
+        } catch (err) {
+            console.error('Failed to load usage stats:', err);
         }
     }
 
@@ -106,23 +136,60 @@ window.openChat = function() {
     showToast('Live chat coming soon! Email us at support@linke.io', 'info');
 };
 
-// Submit ticket
+// Submit ticket — FULLY FUNCTIONAL
 window.submitTicket = async function() {
     const subject = document.getElementById('ticketSubject').value.trim();
     const category = document.getElementById('ticketCategory').value;
     const message = document.getElementById('ticketMessage').value.trim();
 
-    if (!subject || !category || !message) {
-        showToast('Please fill all fields', 'error');
+    if (!subject) {
+        showToast('Please enter a subject', 'error');
+        return;
+    }
+    if (!category) {
+        showToast('Please select a category', 'error');
+        return;
+    }
+    if (!message) {
+        showToast('Please enter a message', 'error');
+        return;
+    }
+    if (message.length < 10) {
+        showToast('Message must be at least 10 characters', 'error');
         return;
     }
 
-    // In production: POST /api/tickets
-    showToast('Ticket submitted! We ll respond within 24 hours.', 'success');
+    const btn = document.querySelector('.ticket-card .btn-primary');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<i data-lucide="loader-2" style="width: 14px; height: 14px; animation: spin 1s linear infinite;"></i> Sending...`;
+    btn.disabled = true;
+    lucide.createIcons();
 
-    document.getElementById('ticketSubject').value = '';
-    document.getElementById('ticketCategory').value = '';
-    document.getElementById('ticketMessage').value = '';
+    try {
+        const res = await fetch('/api/tickets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subject, category, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showToast('Ticket submitted! We\'ll respond within 24 hours.', 'success');
+            document.getElementById('ticketSubject').value = '';
+            document.getElementById('ticketCategory').value = '';
+            document.getElementById('ticketMessage').value = '';
+        } else {
+            showToast(data.message || 'Failed to submit ticket', 'error');
+        }
+    } catch (err) {
+        console.error('Submit ticket error:', err);
+        showToast('Network error. Please try again.', 'error');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        lucide.createIcons();
+    }
 };
 
 window.logout = async function() {
@@ -162,6 +229,7 @@ window.showToast = function(message, type = 'info') {
         box-shadow: var(--shadow-medium);
         animation: fadeInUp 0.3s ease;
         cursor: pointer;
+        z-index: 9999;
     `;
     toast.innerHTML = `
         <i data-lucide="${icons[type]}" style="width: 18px; height: 18px; color: ${colors[type]};"></i>

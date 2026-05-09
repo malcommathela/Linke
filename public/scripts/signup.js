@@ -78,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Redirect to verify page, optionally pass email as query param
             setTimeout(() => {
-                window.location.href = `/pages/verify.html?email=${encodeURIComponent(email)}`;
+                // After successful signup:
+                window.location.href = `/pages/verify.html?email=${encodeURIComponent(data.email)}`;
             }, 1000);
 
         } catch (err) {

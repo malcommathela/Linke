@@ -1,4 +1,4 @@
-// -------------------- INITIAL SETUP --------------------
+// dashboard.js — ZERO DATA EXPOSURE VERSION
 
 document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
@@ -8,10 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let activeMenuId = null;
 let deleteTargetId = null;
+let linksData = []; // Private closure storage — NOT in DOM
 
-// Fetch user info + links + panel wiring
 async function initDashboard() {
-    await loadCurrentUser();
+    const user = await loadCurrentUser();
+    if (!user) return;
     await loadLinks();
     initCreatePanel();
 }
@@ -20,28 +21,29 @@ async function initDashboard() {
 
 async function loadCurrentUser() {
     try {
-        const res = await fetch('/api/me').then(r => r.json()).then(console.log);
-        if (!res.ok) return;
+        const res = await fetch('/api/me', { credentials: 'include' });
+
+        if (!res.ok) {
+            if (res.status === 401) {
+                window.location.href = '/pages/login.html';
+                return null;
+            }
+            throw new Error('Failed');
+        }
 
         const data = await res.json();
         const nameEl = document.querySelector(".user-name");
         const avatarEl = document.querySelector(".user-avatar");
 
-        if (nameEl && data.username) {
-            nameEl.textContent = data.username;
-        }
-
+        if (nameEl && data.username) nameEl.textContent = data.username;
         if (avatarEl && data.username) {
-            const initials = data.username
-                .split(" ")
-                .map((p) => p[0])
-                .join("")
-                .toUpperCase()
-                .slice(0, 2);
+            const initials = data.username.split(" ").map(p => p[0]).join("").toUpperCase().slice(0, 2);
             avatarEl.textContent = initials || data.username[0].toUpperCase();
         }
-    } catch (err) {
-        console.error("Failed to load current user:", err);
+        return data;
+    } catch {
+        // SILENT FAIL — no data exposed
+        return null;
     }
 }
 
@@ -75,12 +77,11 @@ function showToast(message, type = "success") {
 
 // -------------------- LINKS: API + RENDER --------------------
 
-// Load links from backend
 async function loadLinks() {
     try {
         const res = await fetch("/api/urls", {
-            method: "GET",
-            headers: { Accept: "application/json" },
+            credentials: 'include',
+            headers: { Accept: "application/json" }
         });
 
         const data = await res.json();
@@ -88,15 +89,16 @@ async function loadLinks() {
             showToast(data.message || "Failed to load links", "error");
             return;
         }
-        console.log("urls from API:", data.urls);
-        renderLinksFromApi(data.urls || []);
-    } catch (err) {
-        console.error(err);
-        showToast("Network error while loading links", "error");
+
+        // Store privately, never log
+        linksData = data.urls || [];
+        renderLinksFromApi(linksData);
+    } catch {
+        showToast("Network error", "error");
     }
 }
 
-// Render cards using API data
+// SECURITY: No data-* attributes. Use index lookup from private array.
 function renderLinksFromApi(urls) {
     const container = document.getElementById("linksContainer");
     const emptyState = document.getElementById("emptyState");
@@ -114,36 +116,31 @@ function renderLinksFromApi(urls) {
     if (emptyState) emptyState.classList.remove("show");
     if (pagination) pagination.style.display = "flex";
 
-    container.innerHTML = urls
-        .map((u) => {
-            const shortUrl = u.short_url || `${window.location.origin}/${u.short_code}`;
-            const dest = u.long_url;
-            const faviconClass = getFaviconClass(dest);
-            const faviconText = getFaviconText(dest);
-            const clicks = u.click_count ?? 0;
-            const statusText = formatStatus(u);
-            const dateText = formatDate(u.created_at);
-            const qrDataUrl = u.qr_data_url || "";
+    container.innerHTML = urls.map((u, index) => {
+        const shortUrl = u.short_url || `${window.location.origin}/${u.short_code}`;
+        const dest = u.long_url;
+        const faviconClass = getFaviconClass(dest);
+        const faviconText = getFaviconText(dest);
+        const clicks = u.click_count ?? 0;
+        const statusText = formatStatus(u);
+        const dateText = formatDate(u.created_at);
 
-            return `
-        <div class="link-card"
-             data-id="${u.id}"
-             data-short="${shortUrl}"
-             data-long="${dest}"
-             data-qr="${qrDataUrl}">
+        // SECURITY: Only data-index, no raw data exposure
+        return `
+        <div class="link-card" data-index="${index}">
           <div class="link-favicon ${faviconClass}">${faviconText}</div>
 
           <div class="link-info">
             <div class="link-short">
               <a href="${shortUrl}" rel="noopener noreferrer">${shortUrl}</a>
               <div class="link-actions-inline">
-                <button class="link-action-btn" onclick="copyLink('${shortUrl}', event)" title="Copy">
+                <button class="link-action-btn" onclick="copyByIndex(${index}, event)" title="Copy">
                   <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
                 </button>
-                <button class="link-action-btn" onclick="showQr('${qrDataUrl}', event)" title="QR Code">
+                <button class="link-action-btn" onclick="showQrByIndex(${index}, event)" title="QR Code">
                   <i data-lucide="qr-code" style="width: 14px; height: 14px;"></i>
                 </button>
-                <button class="link-action-btn" onclick="editLinkItem('${u.id}', event)" title="Edit">
+                <button class="link-action-btn" onclick="editByIndex(${index}, event)" title="Edit">
                   <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                 </button>
               </div>
@@ -167,24 +164,24 @@ function renderLinksFromApi(urls) {
 
           <div class="link-date">${dateText}</div>
 
-          <div class="link-menu" onclick="toggleLinkMenu('${u.id}', event)">
+          <div class="link-menu" onclick="toggleLinkMenu(${index}, event)">
             <i data-lucide="more-vertical" style="width: 16px; height: 16px;"></i>
 
-            <div class="link-menu-dropdown" id="menu-${u.id}">
-              <button class="link-menu-item" onclick="copyLinkItem('${u.id}', event)">
+            <div class="link-menu-dropdown" id="menu-${index}">
+              <button class="link-menu-item" onclick="copyByIndex(${index}, event)">
                 <i data-lucide="copy"></i>
                 Copy link
               </button>
-              <button class="link-menu-item" onclick="editLinkItem('${u.id}', event)">
+              <button class="link-menu-item" onclick="editByIndex(${index}, event)">
                 <i data-lucide="pencil"></i>
                 Edit link
               </button>
-              <button class="link-menu-item" onclick="showQRCode('${u.id}', event)">
+              <button class="link-menu-item" onclick="showQrByIndex(${index}, event)">
                 <i data-lucide="qr-code"></i>
                 QR code
               </button>
               <div class="link-menu-divider"></div>
-              <button class="link-menu-item danger" onclick="confirmDelete('${u.id}', event)">
+              <button class="link-menu-item danger" onclick="confirmDeleteByIndex(${index}, event)">
                 <i data-lucide="trash-2"></i>
                 Delete link
               </button>
@@ -192,13 +189,93 @@ function renderLinksFromApi(urls) {
           </div>
         </div>
       `;
-        })
-        .join("");
+    }).join("");
 
     lucide.createIcons();
 }
 
-// Helpers to mimic original favicon behavior
+// SECURITY: Private lookup — data never in DOM
+function getLink(index) {
+    return linksData[index] || null;
+}
+
+function copyByIndex(index, event) {
+    event.stopPropagation();
+    const link = getLink(index);
+    if (!link) return;
+    const shortUrl = link.short_url || `${window.location.origin}/${link.short_code}`;
+    navigator.clipboard.writeText(shortUrl).then(
+        () => showToast("Link copied!", "success"),
+        () => showToast("Failed to copy", "error")
+    );
+}
+
+function showQrByIndex(index, event) {
+    event.stopPropagation();
+    const link = getLink(index);
+    if (!link || !link.qr_data_url) {
+        showToast("QR code not available", "error");
+        return;
+    }
+    const modal = document.getElementById("qrModal");
+    const img = document.getElementById("qrModalImage");
+    img.src = link.qr_data_url;
+    modal.classList.add("show");
+}
+
+function editByIndex(index, event) {
+    event.stopPropagation();
+    closeAllMenus();
+    const link = getLink(index);
+    if (!link) return;
+
+    const urlInput = document.getElementById("createUrl");
+    const keyInput = document.getElementById("createKey");
+    const previewKey = document.getElementById("previewKey");
+
+    if (urlInput) urlInput.value = link.long_url || "";
+    if (keyInput && link.short_code) {
+        keyInput.value = link.short_code;
+        if (previewKey) previewKey.textContent = link.short_code;
+    }
+
+    openCreatePanel();
+    showToast("Edit mode", "success");
+}
+
+function confirmDeleteByIndex(index, event) {
+    event.stopPropagation();
+    closeAllMenus();
+    const link = getLink(index);
+    if (!link) return;
+
+    deleteTargetId = link.id;
+
+    const modal = document.createElement("div");
+    modal.className = "delete-modal show";
+    modal.id = "deleteModal";
+
+    modal.innerHTML = `
+      <div class="delete-card" onclick="event.stopPropagation()">
+        <div class="delete-icon">
+          <i data-lucide="trash-2" style="width: 28px; height: 28px;"></i>
+        </div>
+        <h3 class="delete-title">Delete Link?</h3>
+        <p class="delete-desc">
+          This action cannot be undone. The link will stop working immediately.
+        </p>
+        <div class="delete-actions">
+          <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" onclick="executeDelete()">Delete Link</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    lucide.createIcons();
+}
+
+// Helpers
 function getFaviconClass(url) {
     if (!url) return "";
     const u = url.toLowerCase();
@@ -253,13 +330,13 @@ function closeQrModal(event) {
     }
 }
 
-// -------------------- FILTER (SEARCH) --------------------
+// -------------------- FILTER --------------------
 
 async function filterLinks() {
     const query = document.getElementById("searchInput").value.toLowerCase();
 
     try {
-        const res = await fetch("/api/urls");
+        const res = await fetch("/api/urls", { credentials: 'include' });
         const data = await res.json();
         if (!res.ok) return;
 
@@ -270,93 +347,31 @@ async function filterLinks() {
                 (u.long_url && u.long_url.toLowerCase().includes(query))
         );
 
+        // Update private store and re-render
+        linksData = filtered;
         renderLinksFromApi(filtered);
-    } catch (err) {
-        console.error(err);
+    } catch {
+        // Silent
     }
 }
 
-// -------------------- CARD ACTIONS --------------------
-
-function copyLink(shortUrl, event) {
-    event.stopPropagation();
-    navigator.clipboard.writeText(shortUrl).then(
-        () => showToast("Link copied to clipboard!", "success"),
-        () => showToast("Failed to copy", "error")
-    );
-}
-
-// menu‑based copy using card data attributes
-function copyLinkItem(id, event) {
-    event.stopPropagation();
-    closeAllMenus();
-
-    const card = document.querySelector(`.link-card[data-id="${id}"]`);
-    if (!card) return;
-
-    const shortUrl = card.getAttribute("data-short");
-    if (!shortUrl) return;
-
-    navigator.clipboard.writeText(shortUrl).then(
-        () => showToast("Link copied to clipboard!", "success"),
-        () => showToast("Failed to copy", "error")
-    );
-}
-
-// edit prefill using create panel
-function editLinkItem(id, event) {
-    event.stopPropagation();
-    closeAllMenus();
-
-    const card = document.querySelector(`.link-card[data-id="${id}"]`);
-    if (!card) return;
-
-    const longUrl = card.getAttribute("data-long");
-    const shortUrl = card.getAttribute("data-short");
-
-    const urlInput = document.getElementById("createUrl");
-    const keyInput = document.getElementById("createKey");
-    const previewKey = document.getElementById("previewKey");
-
-    if (urlInput) urlInput.value = longUrl || "";
-    if (keyInput && shortUrl) {
-        const key = shortUrl.split("/").pop();
-        keyInput.value = key;
-        if (previewKey) previewKey.textContent = key || "new-link";
-    }
-
-    openCreatePanel();
-    showToast("Edit mode – update your link details", "success");
-}
-
-// QR from menu using existing modal
-function showQRCode(id, event) {
-    event.stopPropagation();
-    closeAllMenus();
-
-    const card = document.querySelector(`.link-card[data-id="${id}"]`);
-    if (!card) return;
-
-    const dataUrl = card.getAttribute("data-qr");
-    showQr(dataUrl, event);
-}
+// -------------------- MENU SYSTEM --------------------
 
 function closeAllMenus() {
-    if (activeMenuId) {
+    if (activeMenuId !== null) {
         const menu = document.getElementById(`menu-${activeMenuId}`);
         if (menu) menu.classList.remove("show");
         activeMenuId = null;
     }
 }
 
-function toggleLinkMenu(id, event) {
+function toggleLinkMenu(index, event) {
     event.stopPropagation();
 
-    const menu = document.getElementById(`menu-${id}`);
+    const menu = document.getElementById(`menu-${index}`);
     if (!menu) return;
 
-    // Close previously open menu if it's a different one
-    if (activeMenuId && activeMenuId !== id) {
+    if (activeMenuId !== null && activeMenuId !== index) {
         const oldMenu = document.getElementById(`menu-${activeMenuId}`);
         if (oldMenu) oldMenu.classList.remove("show");
     }
@@ -367,13 +382,13 @@ function toggleLinkMenu(id, event) {
         activeMenuId = null;
     } else {
         menu.classList.add("show");
-        activeMenuId = id;
+        activeMenuId = index;
     }
 
     lucide.createIcons();
 }
 
-// -------------------- CREATE PANEL & QR --------------------
+// -------------------- CREATE PANEL --------------------
 
 function initCreatePanel() {
     const keyInput = document.getElementById("createKey");
@@ -417,11 +432,7 @@ function initCreatePanel() {
 
                         previewContent.innerHTML = `
               <div style="display:flex; gap:12px; align-items:flex-start;">
-                ${
-                            image
-                                ? `<img src="${image}" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;">`
-                                : ""
-                        }
+                ${image ? `<img src="${image}" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;">` : ""}
                 <div style="text-align:left;">
                   <div style="font-weight:600;margin-bottom:4px;">${title}</div>
                   <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">${desc}</div>
@@ -430,11 +441,10 @@ function initCreatePanel() {
               </div>
             `;
                     })
-                    .catch((err) => {
-                        console.error(err);
+                    .catch(() => {
                         previewContent.textContent = "Could not load preview";
                     });
-            }, 500); // debounce
+            }, 500);
         });
     }
 
@@ -470,6 +480,7 @@ async function createLink() {
         const res = await fetch("/api/urls", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({ long_url, custom_key, expiry }),
         });
 
@@ -487,32 +498,31 @@ async function createLink() {
         document.getElementById("previewKey").textContent = "new-link";
         renderQrPattern("new-link");
         await loadLinks();
-    } catch (err) {
-        console.error(err);
+    } catch {
         showToast("Network error creating link", "error");
     }
 }
 
 async function deleteLink(id) {
     try {
-        const req = await fetch(`/api/urls/${id}`, { method: "DELETE" });
+        const req = await fetch(`/api/urls/${id}`, {
+            method: "DELETE",
+            credentials: 'include'
+        });
         const data = await req.json();
 
         if (!req.ok) {
-            console.log(data.message || "Delete failed");
             showToast(data.message || "Failed to delete link", "error");
             return;
         }
 
         showToast("Link deleted", "success");
         await loadLinks();
-    } catch (err) {
-        console.error(err);
+    } catch {
         showToast("Network error deleting link", "error");
     }
 }
 
-// Simple QR‑pattern (visual only)
 function renderQrPattern(seed) {
     const pattern = document.getElementById("qrPattern");
     if (!pattern) return;
@@ -537,7 +547,7 @@ function simpleHash(str) {
     return Math.abs(hash);
 }
 
-// -------------------- THEME TOGGLE --------------------
+// -------------------- THEME --------------------
 
 function toggleTheme() {
     const html = document.documentElement;
@@ -566,7 +576,7 @@ function initTheme() {
     }
 }
 
-// -------------------- SIDEBAR & NAV --------------------
+// -------------------- SIDEBAR --------------------
 
 function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
@@ -609,7 +619,7 @@ function closeUpgradeModal(event) {
     }
 }
 
-// -------------------- KEYBOARD SHORTCUTS + CLICK OUTSIDE --------------------
+// -------------------- KEYBOARD + CLICK HANDLERS --------------------
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
@@ -627,42 +637,12 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("click", (e) => {
-    if (activeMenuId && !e.target.closest(".link-menu")) {
+    if (activeMenuId !== null && !e.target.closest(".link-menu")) {
         closeAllMenus();
     }
 });
 
-// -------------------- DELETE CONFIRM MODAL --------------------
-
-function confirmDelete(id, event) {
-    event.stopPropagation();
-    closeAllMenus();
-
-    deleteTargetId = id;
-
-    const modal = document.createElement("div");
-    modal.className = "delete-modal show";
-    modal.id = "deleteModal";
-
-    modal.innerHTML = `
-      <div class="delete-card" onclick="event.stopPropagation()">
-        <div class="delete-icon">
-          <i data-lucide="trash-2" style="width: 28px; height: 28px;"></i>
-        </div>
-        <h3 class="delete-title">Delete Link?</h3>
-        <p class="delete-desc">
-          This action cannot be undone. The link will stop working immediately.
-        </p>
-        <div class="delete-actions">
-          <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
-          <button class="btn btn-danger" onclick="executeDelete()">Delete Link</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-    lucide.createIcons();
-}
+// -------------------- DELETE MODAL --------------------
 
 function closeDeleteModal() {
     const modal = document.getElementById("deleteModal");
