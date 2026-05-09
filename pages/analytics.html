@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics — Linke</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/analytics.css">
+</head>
+<body>
+<button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+</button>
+
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" id="sidebarToggle">
+            <i data-lucide="chevron-left" style="width: 14px; height: 14px;" id="sidebarToggleIcon"></i>
+        </div>
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i data-lucide="link-2" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            <span class="brand-text">linke</span>
+        </div>
+
+        <nav class="nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon"><i data-lucide="link" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Links</span>
+            </a>
+            <a href="/analytics" class="nav-item active">
+                <span class="nav-icon"><i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Analytics</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Events</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon"><i data-lucide="globe" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Domains</span>
+                <span class="pro-badge">PRO</span>
+            </a>
+        </nav>
+
+        <div class="nav-bottom">
+            <a href="/settings" class="nav-item">
+                <span class="nav-icon"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Settings</span>
+            </a>
+            <a href="/support" class="nav-item">
+                <span class="nav-icon"><i data-lucide="help-circle" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Support</span>
+            </a>
+        </div>
+
+        <div class="usage-section" id="usageSection">
+            <div class="usage-header">
+                <span class="usage-title">Free Usage</span>
+                <span class="usage-info"><i data-lucide="info" style="width: 16px; height: 16px;"></i></span>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Links</span>
+                    <span class="usage-bar-value" id="linkUsage">0 of 30</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill" id="linkProgress" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Clicks</span>
+                    <span class="usage-bar-value" id="clickUsage">0 of 100k</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill clicks" id="clickProgress" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user-avatar" id="userAvatar">JD</div>
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-menu"><i data-lucide="more-horizontal" style="width: 16px; height: 16px;"></i></span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="page-header">
+            <div class="page-title-group">
+                <h1 class="page-title">Analytics Overview</h1>
+                <p class="page-subtitle" id="analyticsSubtitle">Track performance across all your shortened links.</p>
+            </div>
+            <div class="page-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i data-lucide="moon" style="width: 18px; height: 18px;" id="themeIcon"></i>
+                </button>
+                <a href="/dashboard" class="btn btn-primary">
+                    <i data-lucide="link" style="width: 16px; height: 16px;"></i>
+                    Back to Links
+                </a>
+            </div>
+        </div>
+
+        <!-- Date Range -->
+        <div class="date-range-bar animate-in delay-1" id="dateRangeBar">
+            <button class="date-btn" data-range="24h">24h</button>
+            <button class="date-btn" data-range="7d">7d</button>
+            <button class="date-btn active" data-range="30d">30d</button>
+            <button class="date-btn" data-range="90d">90d</button>
+            <button class="date-btn" data-range="1y">1y</button>
+            <button class="date-custom">
+                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                Custom
+            </button>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-card skeleton-card" data-stat="clicks">
+                <div class="stat-header">
+                    <div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div>
+                    <div class="skeleton skeleton-icon"></div>
+                </div>
+                <div class="skeleton skeleton-value"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+            <div class="stat-card skeleton-card" data-stat="visitors">
+                <div class="stat-header">
+                    <div class="skeleton skeleton-text" style="width: 90px; height: 14px;"></div>
+                    <div class="skeleton skeleton-icon"></div>
+                </div>
+                <div class="skeleton skeleton-value"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+            <div class="stat-card skeleton-card" data-stat="ctr">
+                <div class="stat-header">
+                    <div class="skeleton skeleton-text" style="width: 70px; height: 14px;"></div>
+                    <div class="skeleton skeleton-icon"></div>
+                </div>
+                <div class="skeleton skeleton-value"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+            <div class="stat-card skeleton-card" data-stat="bounce">
+                <div class="stat-header">
+                    <div class="skeleton skeleton-text" style="width: 85px; height: 14px;"></div>
+                    <div class="skeleton skeleton-icon"></div>
+                </div>
+                <div class="skeleton skeleton-value"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Line Chart -->
+            <div class="chart-card" id="lineChartCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 140px; height: 18px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 80px; height: 16px;"></div>
+                </div>
+                <div class="line-chart-container skeleton-chart" id="lineChartContainer">
+                    <div class="skeleton skeleton-chart-area"></div>
+                </div>
+            </div>
+
+            <!-- Traffic Sources Pie -->
+            <div class="chart-card" id="pieChartCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 120px; height: 18px;"></div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; height: 180px;" id="pieSkeleton">
+                    <div class="skeleton skeleton-pie"></div>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-left: 32px;">
+                        <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 90px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 70px; height: 14px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Grid -->
+        <div class="bottom-grid">
+            <!-- Top Links -->
+            <div class="table-card" id="topLinksCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 160px; height: 18px;"></div>
+                </div>
+                <div class="bar-chart skeleton-bars" id="topLinksChart">
+                    <div class="skeleton skeleton-bar" style="height: 60%;"></div>
+                    <div class="skeleton skeleton-bar" style="height: 80%;"></div>
+                    <div class="skeleton skeleton-bar" style="height: 45%;"></div>
+                    <div class="skeleton skeleton-bar" style="height: 70%;"></div>
+                    <div class="skeleton skeleton-bar" style="height: 55%;"></div>
+                    <div class="skeleton skeleton-bar" style="height: 35%;"></div>
+                </div>
+            </div>
+
+            <!-- Geographic Table -->
+            <div class="table-card" id="geoCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 110px; height: 18px;"></div>
+                </div>
+                <div class="skeleton-table" id="geoTable">
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-flag"></div>
+                        <div class="skeleton skeleton-text" style="width: 120px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-flag"></div>
+                        <div class="skeleton skeleton-text" style="width: 100px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-flag"></div>
+                        <div class="skeleton skeleton-text" style="width: 90px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-flag"></div>
+                        <div class="skeleton skeleton-text" style="width: 80px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-flag"></div>
+                        <div class="skeleton skeleton-text" style="width: 70px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Bottom Grid -->
+        <div class="bottom-grid" style="margin-top: 16px;">
+            <!-- Device Breakdown -->
+            <div class="table-card" id="deviceCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 140px; height: 18px;"></div>
+                </div>
+                <div class="skeleton-table" id="deviceTable">
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 80px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 70px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 60px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referrers -->
+            <div class="table-card" id="referrerCard">
+                <div class="chart-header">
+                    <div class="skeleton skeleton-text" style="width: 120px; height: 18px;"></div>
+                </div>
+                <div class="skeleton-table" id="referrerTable">
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 90px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 70px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 80px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                    <div class="skeleton-row">
+                        <div class="skeleton skeleton-icon-sm"></div>
+                        <div class="skeleton skeleton-text" style="width: 65px;"></div>
+                        <div class="skeleton skeleton-bar-line"></div>
+                        <div class="skeleton skeleton-text" style="width: 50px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="module" src="../public/scripts/analytics/analytics.js"></script>
+</body>
+</html>

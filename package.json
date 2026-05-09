@@ -16,11 +16,13 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "geoip-lite": "^2.0.2",
     "jsonwebtoken": "^9.0.3",
     "link-preview-js": "^4.0.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^8.0.7",
     "open-graph-scraper": "^6.11.0",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "ua-parser-js": "^2.0.9"
   }
 }

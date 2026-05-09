@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — Linke</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/analytics.css">
+</head>
+<body>
+<button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+</button>
+
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" id="sidebarToggle">
+            <i data-lucide="chevron-left" style="width: 14px; height: 14px;" id="sidebarToggleIcon"></i>
+        </div>
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i data-lucide="link-2" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            <span class="brand-text">linke</span>
+        </div>
+
+        <nav class="nav">
+            <a href="/dashboard" class="nav-item" data-page="dashboard">
+                <span class="nav-icon"><i data-lucide="link" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Links</span>
+            </a>
+            <a href="/analytics" class="nav-item" data-page="analytics">
+                <span class="nav-icon"><i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Analytics</span>
+            </a>
+            <a href="#" class="nav-item" onclick="return showToast('Events coming soon!', 'info')">
+                <span class="nav-icon"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Events</span>
+            </a>
+            <a href="#" class="nav-item" onclick="return showToast('Domains PRO coming soon!', 'info')">
+                <span class="nav-icon"><i data-lucide="globe" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Domains</span>
+                <span class="pro-badge">PRO</span>
+            </a>
+        </nav>
+
+        <div class="nav-bottom">
+            <a href="/settings" class="nav-item active">
+                <span class="nav-icon"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Settings</span>
+            </a>
+            <a href="/support" class="nav-item">
+                <span class="nav-icon"><i data-lucide="help-circle" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Support</span>
+            </a>
+        </div>
+
+        <div class="usage-section" id="usageSection">
+            <div class="usage-header">
+                <span class="usage-title">Free Usage</span>
+                <span class="usage-info"><i data-lucide="info" style="width: 16px; height: 16px;"></i></span>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Links</span>
+                    <span class="usage-bar-value" id="linkUsage">0 of 30</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill" id="linkProgress" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Clicks</span>
+                    <span class="usage-bar-value" id="clickUsage">0 of 100k</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill clicks" id="clickProgress" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user-avatar" id="userAvatar">JD</div>
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-menu" onclick="logout()">
+                    <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                </span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="page-header">
+            <div class="page-title-group">
+                <h1 class="page-title">Account Settings</h1>
+                <p class="page-subtitle">Manage your profile, security, and preferences.</p>
+            </div>
+            <div class="page-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i data-lucide="moon" style="width: 18px; height: 18px;" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-layout">
+            <!-- Settings Nav -->
+            <nav class="settings-nav">
+                <button class="settings-nav-item active" data-section="profile">
+                    <i data-lucide="user" class="settings-nav-icon" style="width: 18px; height: 18px;"></i>
+                    Profile
+                </button>
+                <button class="settings-nav-item" data-section="security">
+                    <i data-lucide="shield" class="settings-nav-icon" style="width: 18px; height: 18px;"></i>
+                    Security
+                </button>
+                <button class="settings-nav-item" data-section="notifications">
+                    <i data-lucide="bell-ring" class="settings-nav-icon" style="width: 18px; height: 18px;"></i>
+                    Notifications
+                </button>
+                <button class="settings-nav-item" data-section="billing">
+                    <i data-lucide="credit-card" class="settings-nav-icon" style="width: 18px; height: 18px;"></i>
+                    Billing
+                </button>
+                <button class="settings-nav-item" data-section="danger">
+                    <i data-lucide="alert-triangle" class="settings-nav-icon" style="width: 18px; height: 18px;"></i>
+                    Danger Zone
+                </button>
+            </nav>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Profile Section -->
+                <div class="settings-section active" id="section-profile">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Profile Information</h2>
+                        <p class="settings-desc">Update your personal details and public profile.</p>
+                    </div>
+
+                    <div class="avatar-upload">
+                        <div class="avatar-preview" id="avatarPreview">JD</div>
+                        <div class="avatar-actions">
+                            <button class="btn btn-primary" onclick="document.getElementById('avatarInput').click()">
+                                <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
+                                Upload Photo
+                            </button>
+                            <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(this)">
+                            <span class="avatar-hint">JPG, PNG or GIF. Max 2MB.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" class="form-input" id="displayName" value="John Doe" placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" id="username" value="johndoe" placeholder="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" id="email" value="john@example.com" placeholder="you@example.com">
+                        <p class="form-hint">This email is used for notifications and login.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-textarea" id="bio" placeholder="Tell us a little about yourself...">URL shortener enthusiast. Building things on the web.</textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 8px;">
+                        <button class="btn btn-primary" onclick="saveProfile()">
+                            <i data-lucide="save" style="width: 14px; height: 14px;"></i>
+                            Save Changes
+                        </button>
+                        <button class="btn btn-ghost" onclick="resetProfile()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="settings-section" id="section-security">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Security</h2>
+                        <p class="settings-desc">Manage your password and account security.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" class="form-input" id="currentPassword" placeholder="••••••••">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-input" id="newPassword" placeholder="Min 8 characters">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Repeat password">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="changePassword()" style="margin-bottom: 32px;">
+                        <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
+                        Update Password
+                    </button>
+
+                    <div style="border-top: 1px solid var(--border-light); padding-top: 24px;">
+                        <div class="toggle-row">
+                            <div class="toggle-info">
+                                <div class="toggle-label">Two-Factor Authentication</div>
+                                <div class="toggle-desc">Add an extra layer of security to your account.</div>
+                            </div>
+                            <button class="toggle-switch" id="toggle2FA" onclick="toggle2FA()"></button>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-info">
+                                <div class="toggle-label">Login Notifications</div>
+                                <div class="toggle-desc">Get notified when someone logs into your account.</div>
+                            </div>
+                            <button class="toggle-switch active" id="toggleLogin" onclick="toggleSwitch(this)"></button>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-info">
+                                <div class="toggle-label">Active Sessions</div>
+                                <div class="toggle-desc">View and manage devices logged into your account.</div>
+                            </div>
+                            <button class="btn btn-ghost" style="padding: 6px 14px; font-size: 12px;">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="settings-section" id="section-notifications">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Notifications</h2>
+                        <p class="settings-desc">Choose what you want to be notified about.</p>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Link Performance Reports</div>
+                            <div class="toggle-desc">Weekly summary of clicks and engagement.</div>
+                        </div>
+                        <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">New Link Created</div>
+                            <div class="toggle-desc">Notification when you create a new short link.</div>
+                        </div>
+                        <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Expiration Alerts</div>
+                            <div class="toggle-desc">Warn when links are about to expire.</div>
+                        </div>
+                        <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-label">Marketing & Updates</div>
+                            <div class="toggle-desc">Product news and feature announcements.</div>
+                        </div>
+                        <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label class="form-label">Notification Email</label>
+                        <input type="email" class="form-input" value="john@example.com" placeholder="notifications@example.com">
+                    </div>
+                </div>
+
+                <!-- Billing Section -->
+                <div class="settings-section" id="section-billing">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Billing & Plan</h2>
+                        <p class="settings-desc">Manage your subscription and payment methods.</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, var(--bg-mint), var(--bg-teal)); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1.5px solid var(--border-light);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                            <div>
+                                <span style="font-size: 12px; font-weight: 700; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.5px;">Current Plan</span>
+                                <div style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">Free</div>
+                            </div>
+                            <span style="background: var(--badge-bg); color: var(--accent-teal); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px;">Active</span>
+                        </div>
+                        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; font-weight: 500;">
+                            22 of 30 links used · 20k of 100k clicks
+                        </div>
+                        <button class="btn btn-primary" onclick="showToast('Upgrade coming soon!', 'info')">
+                            <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                            Upgrade to Pro
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1.5px solid var(--border-light); border-radius: 12px; background: var(--input-bg);">
+                            <i data-lucide="credit-card" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                            <span style="font-size: 14px; color: var(--text-secondary); font-weight: 500;">No payment method on file</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Billing History</label>
+                        <div style="text-align: center; padding: 32px; color: var(--text-muted); font-size: 14px; font-weight: 500;">
+                            <i data-lucide="receipt" style="width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.5;"></i>
+                            <p>No invoices yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="settings-section" id="section-danger">
+                    <div class="settings-header">
+                        <h2 class="settings-title" style="color: var(--accent-coral);">Danger Zone</h2>
+                        <p class="settings-desc">Irreversible actions for your account.</p>
+                    </div>
+
+                    <div style="margin-bottom: 24px; padding: 20px; border: 1.5px solid var(--border-light); border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Deactivate Account</div>
+                                <div style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Temporarily disable your account. You can reactivate anytime.</div>
+                            </div>
+                            <button class="btn btn-ghost" onclick="deactivateAccount()">Deactivate</button>
+                        </div>
+                    </div>
+
+                    <div style="padding: 20px; border: 1.5px solid var(--accent-coral); border-radius: 12px; background: rgba(232, 93, 78, 0.03);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 14px; font-weight: 600; color: var(--accent-coral); margin-bottom: 4px;">Delete Account</div>
+                                <div style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Permanently delete your account and all data. This cannot be undone.</div>
+                            </div>
+                            <button class="btn btn-danger" onclick="deleteAccount()">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module" src="../public/scripts/settings.js"></script>
+</body>
+</html>

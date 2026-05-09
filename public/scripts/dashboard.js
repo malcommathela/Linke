@@ -135,7 +135,7 @@ function renderLinksFromApi(urls) {
 
           <div class="link-info">
             <div class="link-short">
-              <a href="${shortUrl}" target="_blank" rel="noopener noreferrer">${shortUrl}</a>
+              <a href="${shortUrl}" rel="noopener noreferrer">${shortUrl}</a>
               <div class="link-actions-inline">
                 <button class="link-action-btn" onclick="copyLink('${shortUrl}', event)" title="Copy">
                   <i data-lucide="copy" style="width: 14px; height: 14px;"></i>

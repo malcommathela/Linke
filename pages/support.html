@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support — Linke</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../public/styles/analytics.css">
+</head>
+<body>
+<button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+</button>
+
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" id="sidebarToggle">
+            <i data-lucide="chevron-left" style="width: 14px; height: 14px;" id="sidebarToggleIcon"></i>
+        </div>
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i data-lucide="link-2" style="width: 20px; height: 20px; color: white;"></i>
+            </div>
+            <span class="brand-text">linke</span>
+        </div>
+
+        <nav class="nav">
+            <a href="/dashboard" class="nav-item" data-page="dashboard">
+                <span class="nav-icon"><i data-lucide="link" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Links</span>
+            </a>
+            <a href="/analytics" class="nav-item" data-page="analytics">
+                <span class="nav-icon"><i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Analytics</span>
+            </a>
+            <a href="#" class="nav-item" onclick="return showToast('Events coming soon!', 'info')">
+                <span class="nav-icon"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Events</span>
+            </a>
+            <a href="#" class="nav-item" onclick="return showToast('Domains PRO coming soon!', 'info')">
+                <span class="nav-icon"><i data-lucide="globe" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Domains</span>
+                <span class="pro-badge">PRO</span>
+            </a>
+        </nav>
+
+        <div class="nav-bottom">
+            <a href="/settings" class="nav-item">
+                <span class="nav-icon"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Settings</span>
+            </a>
+            <a href="/support" class="nav-item active">
+                <span class="nav-icon"><i data-lucide="help-circle" style="width: 20px; height: 20px;"></i></span>
+                <span class="nav-text">Support</span>
+            </a>
+        </div>
+
+        <div class="usage-section" id="usageSection">
+            <div class="usage-header">
+                <span class="usage-title">Free Usage</span>
+                <span class="usage-info"><i data-lucide="info" style="width: 16px; height: 16px;"></i></span>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Links</span>
+                    <span class="usage-bar-value" id="linkUsage">0 of 30</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill" id="linkProgress" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="usage-bar">
+                <div class="usage-bar-header">
+                    <span class="usage-bar-label">Clicks</span>
+                    <span class="usage-bar-value" id="clickUsage">0 of 100k</span>
+                </div>
+                <div class="usage-progress">
+                    <div class="usage-progress-fill clicks" id="clickProgress" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user-avatar" id="userAvatar">JD</div>
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-menu" onclick="logout()">
+                    <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                </span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="page-header">
+            <div class="page-title-group">
+                <h1 class="page-title">Support Center</h1>
+                <p class="page-subtitle">Get help and find answers to your questions.</p>
+            </div>
+            <div class="page-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i data-lucide="moon" style="width: 18px; height: 18px;" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Search -->
+        <div class="support-hero">
+            <h2 class="support-hero-title">How can we help?</h2>
+            <p class="support-hero-desc">Search our knowledge base or browse categories below.</p>
+            <div class="support-search">
+                    <span class="support-search-icon">
+                        <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                    </span>
+                <input type="text" placeholder="Search for answers..." id="supportSearch" oninput="filterFAQs(this.value)">
+            </div>
+        </div>
+
+        <!-- Contact Cards -->
+        <div class="contact-grid">
+            <div class="contact-card" onclick="openChat()">
+                <div class="contact-icon teal">
+                    <i data-lucide="message-circle" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div class="contact-title">Live Chat</div>
+                <div class="contact-desc">Chat with our support team in real-time.</div>
+                <span class="contact-btn">Start Chat</span>
+            </div>
+            <div class="contact-card" onclick="window.location.href='mailto:support@linke.io'">
+                <div class="contact-icon blue">
+                    <i data-lucide="mail" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div class="contact-title">Email Support</div>
+                <div class="contact-desc">support@linke.io</div>
+                <span class="contact-btn">Send Email</span>
+            </div>
+            <div class="contact-card" onclick="showToast('Phone support coming soon!', 'info')">
+                <div class="contact-icon coral">
+                    <i data-lucide="phone" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div class="contact-title">Phone Support</div>
+                <div class="contact-desc">+1 (555) 123-4567</div>
+                <span class="contact-btn">Call Now</span>
+            </div>
+        </div>
+
+        <!-- FAQ + Ticket Grid -->
+        <div class="bottom-grid">
+            <!-- FAQ -->
+            <div class="faq-container">
+                <div class="faq-header">
+                    <div class="faq-header-icon">
+                        <i data-lucide="help-circle" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <div class="faq-header-title">Frequently Asked Questions</div>
+                        <div class="faq-header-desc">Find quick answers to common questions</div>
+                    </div>
+                </div>
+
+                <div class="faq-search">
+                        <span class="faq-search-icon">
+                            <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                        </span>
+                    <input type="text" placeholder="Search FAQs..." id="faqSearch" oninput="filterFAQs(this.value)">
+                </div>
+
+                <div id="faqList">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I create a short link?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Navigate to your Dashboard and click the "Create New Link" button. Enter your long URL, optionally set a custom short code and expiration date, then click Create. Your link will be ready instantly.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Can I customize my short link?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Yes! When creating a link, enter your preferred key in the "Shorten Key" field. For example, typing "launch" will create linke.io/launch. Custom keys are available on all plans.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What happens when a link expires?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            When a link reaches its expiration date, visitors will see a "This link has expired" message instead of being redirected. You can extend the expiration from your Dashboard at any time.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I track link analytics?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Go to the Analytics page from the sidebar. You'll see total clicks, unique visitors, geographic data, device breakdown, and referrer information for all your links. Data updates in real-time.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Is there a limit on how many links I can create?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Free accounts can create up to 30 links with 100,000 total clicks. Upgrade to Linke Pro for unlimited links, custom domains, and advanced analytics.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I delete a link?</span>
+                            <i data-lucide="chevron-down" class="faq-chevron" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <div class="faq-answer">
+                            On your Dashboard, hover over the link you want to remove and click the trash icon. Confirm the deletion in the popup. Deleted links cannot be recovered, but the short code becomes available again.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Ticket -->
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    <div class="ticket-header-icon">
+                        <i data-lucide="ticket" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <div class="faq-header-title">Submit a Ticket</div>
+                        <div class="faq-header-desc">We'll respond within 24 hours</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" class="form-input" id="ticketSubject" placeholder="Brief description of your issue">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="ticketCategory">
+                        <option value="">Select a category</option>
+                        <option value="bug">Bug Report</option>
+                        <option value="feature">Feature Request</option>
+                        <option value="billing">Billing Question</option>
+                        <option value="account">Account Issue</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-textarea" id="ticketMessage" placeholder="Describe your issue in detail..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="submitTicket()" style="width: 100%; justify-content: center;">
+                    <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+                    Submit Ticket
+                </button>
+
+                <div class="ticket-meta">
+                    <span class="ticket-meta-dot"></span>
+                    <span>Average response time: 2-4 hours</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module" src="../public/scripts/support.js"></script>
+</body>
+</html>
