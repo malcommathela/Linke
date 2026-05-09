@@ -1,4 +1,4 @@
-// server.js — SECURE + OPTIMIZED for Upstash Redis
+// server.js — MEMORY-OPTIMIZED for Render 512MB
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { createClient } = require("@supabase/supabase-js");
@@ -23,11 +23,15 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config({ path: path.join(__dirname, ".env") });
 }
 
-// ==================== CLUSTER MODE ====================
-if (cluster.isPrimary && process.env.NODE_ENV === "production") {
-    const numCPUs = os.cpus().length;
-    console.log(`Primary ${process.pid} spawning ${numCPUs} workers...`);
-    for (let i = 0; i < numCPUs; i++) cluster.fork();
+// ==================== CLUSTER MODE (Render-safe) ====================
+// Render sets WEB_CONCURRENCY=1 on 512MB instances
+const numWorkers = process.env.WEB_CONCURRENCY
+    ? parseInt(process.env.WEB_CONCURRENCY, 10)
+    : (process.env.NODE_ENV === "production" ? os.cpus().length : 1);
+
+if (cluster.isPrimary && numWorkers > 1) {
+    console.log(`Primary ${process.pid} spawning ${numWorkers} workers...`);
+    for (let i = 0; i < numWorkers; i++) cluster.fork();
     cluster.on("exit", (worker) => {
         console.log(`Worker ${worker.process.pid} died, restarting...`);
         cluster.fork();
@@ -53,14 +57,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     db: { schema: "public" },
 });
 
-// ==================== REDIS (UPSTASH-OPTIMIZED) ====================
+// ==================== REDIS (Memory-efficient) ====================
 const isUpstash = REDIS_URL.includes("upstash") || REDIS_URL.startsWith("rediss://");
 
 const redis = new Redis(REDIS_URL, {
-    retryStrategy: (times) => {
-        const delay = Math.min(times * 100, 3000);
-        return delay;
-    },
+    retryStrategy: (times) => Math.min(times * 100, 3000),
     maxRetriesPerRequest: null,
     enableReadyCheck: true,
     enableOfflineQueue: true,
@@ -71,6 +72,7 @@ const redis = new Redis(REDIS_URL, {
         const targetErrors = ["READONLY", "ETIMEDOUT", "ECONNRESET", "ECONNREFUSED"];
         return targetErrors.some(e => err.message.includes(e));
     },
+    family: 4,
 });
 
 redis.on("error", (err) => {
@@ -220,7 +222,6 @@ async function sendEmail(email, code) {
     await transporter.sendMail(mailOptions);
 }
 
-// SECURITY: Generic auth, no data exposure
 function authMiddleware(req, res, next) {
     const token = req.cookies?.auth_token;
     if (!token) {
@@ -552,7 +553,6 @@ app.get("/support", authMiddleware, (req, res) => {
 
 // ----------------- USER ROUTES -----------------
 
-// SECURITY: Minimal data exposure
 app.get("/api/me", authMiddleware, (req, res) => {
     res.json({
         username: req.user.username
